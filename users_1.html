@@ -1,0 +1,685 @@
+<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>etherscan stats</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* styles généraux pour le corps et le conteneur principal */
+        body {
+            font-family: arial, sans-serif;
+            background-color: #f4f7f9;
+            justify-content: center;
+            padding: 20px;
+            margin: 0;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 420px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        /* --- NOUVEAUX STYLES POUR L'EN-TÊTE PERSONNALISÉ (LOGO + MAIL) --- */
+        .custom-header {
+            display: flex;
+            justify-content: space-between; /* Pour pousser le mail à droite */
+            align-items: center; /* Pour aligner verticalement */
+            padding: 10px 20px; /* Ajustez le padding si nécessaire */
+            margin-bottom: 10px; /* Espace sous l'en-tête */
+        }
+
+        .custom-header .logo-container img {
+            width: 100px; /* Taille de votre logo */
+        }
+
+        .custom-header .mail-icon a {
+            color: #0b1426; /* Couleur de l'icône de mail, peut être ajustée */
+            font-size: 1.5rem; /* Taille de l'icône */
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .custom-header .mail-icon a:hover {
+            color: #1e2a44; /* Couleur au survol */
+        }
+        /* --- FIN NOUVEAUX STYLES --- */
+
+
+        /* en-tête de la page (l'ancien bandeau noir, que nous n'utilisons plus pour le mail) */
+        /* Je le garde au cas où vous voudriez le réutiliser pour autre chose */
+        .header {
+            background-color: #0b1426;
+            color: #fff;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 1.1rem;
+            display: none; /* CACHE L'ANCIEN BANDEAU NOIR */
+        }
+
+
+        /* cartes d'information (prix, capitalisation) */
+        .info-card {
+            padding: 15px 20px;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .info-card .icon {
+            font-size: 1.6rem;
+            color: #333;
+        }
+
+        .info-card .content {
+            flex-grow: 1;
+        }
+
+        .info-card .label {
+            color: #6c757d;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+        }
+
+        .info-card .value {
+            font-size: 1rem;
+            font-weight: bold;
+            margin-top: 3px;
+        }
+
+        .info-card .value .small-text {
+            font-size: 0.9rem;
+            font-weight: normal;
+            color: #333;
+        }
+
+        .info-card .value .green {
+            color: #28a745;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+        
+        /* section des transactions et du gaz */
+        .transaction-info {
+            padding: 15px 20px;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .transaction-info > div {
+            flex-basis: 50%;
+        }
+
+        .transaction-info .label {
+            color: #6c757d;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+        }
+
+        .transaction-info .value {
+            font-size: 1rem;
+            font-weight: bold;
+            margin-top: 3px;
+        }
+
+        .transaction-info .value .small-text {
+            font-size: 0.9rem;
+            font-weight: normal;
+        }
+
+        /* section des blocs */
+        .block-info {
+            padding: 15px 20px;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .block-info > div {
+            flex-basis: 50%;
+        }
+
+        .block-info .label {
+            color: #6c757d;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+        }
+
+        .block-info .value {
+            font-size: 1rem;
+            font-weight: bold;
+            margin-top: 3px;
+        }
+
+        /* section de l'historique des transactions (graphique) */
+        .history-graph {
+            padding: 15px 20px;
+        }
+
+        .history-graph .label {
+            color: #6c757d;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+        
+        /* zone de remplacement pour le graphique */
+        .graph-placeholder {
+            width: 100%;
+            height: 100px;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%"><path d="m0 60 l10 50 q20 40 30 50 t60 60 t90 50 l100 40" stroke="#ccc" stroke-width="2" fill="none"/></svg>');
+            background-repeat: no-repeat;
+            background-size: 100% 100%;
+            margin-top: 10px;
+        }
+
+        .graph-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            color: #6c757d;
+            margin-top: 5px;
+        }
+
+        /* Nouveaux styles pour les cartes de revenu/ventes */
+        .top-cards-container {
+            display: flex;
+            justify-content:space-around;
+            padding: 5px 1px; 
+            gap: 10px; /* Espace entre les cartes */
+            border-bottom: 1px solid #e0e0e0; /* Séparateur */
+            margin-left:5%;
+        }
+
+        .top-card {
+            background-color:#F9E4EE; /* Couleur de fond légère */
+            border-radius: 8px;
+            padding: 15px; 
+            flex: 1; /* Pour que les cartes prennent la même largeur */
+            text-align: left;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05); /* Ombre légère */
+        }
+
+        .top-card .value {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #343a40;
+            margin-bottom: 5px;
+        }
+
+        .top-card .label {
+            font-size: 0.75rem;
+            color: #6c757d;
+            text-transform: uppercase;
+        }
+        .top-card .info-icon {
+            font-size: 0.75rem;
+            color: #6c757d;
+            margin-left: 5px;
+        }
+
+        /* NOUVEAUX STYLES POUR LES BOUTONS FIXES */
+        .fixed-buttons-container {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            border: 0.5px solid #F9E4EE;
+            background-color: #fff;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000; /* Assure que les boutons sont au-dessus du reste du contenu */
+        }
+
+        .fixed-button {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 150px; /* Taille fixe */
+            height: 50px;
+            background-color: #0b1426;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            transition: background-color 0.3s ease;
+        }
+
+        .fixed-button:hover {
+            background-color: #1e2a44;
+        }
+
+        .fixed-button i {
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+        }
+
+        /* NOUVEAUX STYLES POUR LA FENÊTRE MODALE DE DÉPÔT */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1001;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            justify-content: center;
+            align-items: center;
+            overflow: auto;
+        }
+
+        .modal-content {
+            background-color: #ffffff;
+            padding: 25px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+            position: relative;
+            animation-name: animatetop;
+            animation-duration: 0.4s;
+        }
+
+        @keyframes animatetop {
+            from {top: -300px; opacity: 0}
+            to {top: 0; opacity: 1}
+        }
+
+        .close-btn {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close-btn:hover,
+        .close-btn:focus {
+            color: #333;
+            text-decoration: none;
+        }
+
+        .modal-header {
+            text-align: center;
+            border-bottom: 1px solid #e0e0e0;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+
+        .modal-header i {
+            font-size: 2.5rem;
+            color: #0b1426;
+            margin-bottom: 10px;
+        }
+
+        .modal-header h2 {
+            font-size: 1.5rem;
+            color: #0b1426;
+            margin: 5px 0;
+        }
+
+        .modal-header p {
+            font-size: 0.9rem;
+            color: #6c757d;
+            margin: 0;
+        }
+
+        .deposit-option {
+            margin-bottom: 20px;
+        }
+
+        .deposit-option label {
+            display: block;
+            font-size: 0.8rem;
+            color: #6c757d;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .info-group {
+            display: flex;
+            align-items: center;
+            background-color: #f8f9fa;
+            border: 1px solid #ced4da;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .info-group input {
+            flex-grow: 1;
+            border: none;
+            background: transparent;
+            padding: 12px 10px;
+            font-size: 0.9rem;
+            color: #333;
+            cursor: text;
+        }
+
+        .info-group input:focus {
+            outline: none;
+        }
+
+        .copy-btn {
+            background-color: #0b1426;
+            color: #fff;
+            border: none;
+            padding: 12px 15px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .copy-btn:hover {
+            background-color: #1e2a44;
+        }
+
+        .modal-footer-text {
+            text-align: center;
+            font-size: 0.75rem;
+            color: #999;
+            margin-top: 10px;
+        }
+        
+        /* Message de confirmation de copie */
+        .copy-success-message {
+            position: fixed;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #28a745;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            font-size: 0.9rem;
+            z-index: 1002;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
+        }
+
+        .copy-success-message.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .copy-success-message i {
+            margin-right: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="custom-header">
+        <div class="logo-container">
+            <img src="image/review.png" alt="Logo">
+        </div>
+        <div class="mail-icon">
+            <a href="mailto:i5review.bj@gmail.com" title="Contacter le support"><i class="fas fa-envelope"></i></a>
+        </div>
+    </div>
+    <div class="container">
+    <div class="header">
+        <span><i class="fas fa-bars"></i> etherscan stats</span>
+        <div class="header-icons">
+            <i class="fas fa-share-alt"></i>
+        </div>
+    </div>
+    <div class="top-cards-container">
+        <div class="top-card">
+            <div class="value">$0.00 </div> 
+           <div class="label">Solde Total <i class="fas fa-info-circle info-icon"></i></div><br>
+        </div>
+  
+  <div class="top-card">
+            <div class="value">$0.00</div>
+            <div class="label">Revenue totale<i class="fas fa-info-circle info-icon"></i></div>
+        </div><br>
+    </div>
+
+  <div class="info-card">
+      
+        <div class="content">
+       
+<img style="width:100%;" src="image/vieu.jpg">
+        </div>
+    </div>
+
+   
+    
+    <div class="info-card">
+       <i class="fas fa-chart-line icon"></i>
+        <div class="content">
+            <div class="label">mes benefices</div>
+            <div class="value">
+                €0.00 <span class="small-text">BENEFICE REALISÉ</span>
+            </div>
+        </div>
+    </div>
+
+   <a href="produit.php" style="text-decoration:none;color:black;" > <div class="info-card">
+ <i class="fas fa-boxes icon"></i>
+ 
+        <div class="content">
+            <div class="label">Ma boutique</div>
+            <div class="value">0 <span class="small-text"> STOCK DISPONIBLE</</div>
+        </div>
+    </div></div></a>
+
+  
+
+ <div class="info-card">
+       <i class="fas fa-shopping-cart icon"></i>
+        <div class="content">
+            <div class="label">mes ventes</div>
+            <div class="value">
+                0 <span class="small-text"> VENTE REALISÉ</span> 
+            </div>
+        </div>
+    </div>
+
+  <a href="#" style="text-decoration:none;color:black;">  <div class="info-card">
+        
+<img style="width:50px;" src="image/ali.png">
+        <div class="content">
+            <div class="label">Voir LE MARCHÉ </div>
+            <div class="value">2,785</div><span class="small-text"> Produits disponibles</span>
+        </div>
+    </div></a>
+    <div class="transaction-info">
+        <div>
+            <div class="label">NB VISITE</div>
+            <div class="value">0<span class="small-text"> VISITE</span></div>
+        </div>
+        <div>
+            <div class="label">NB CLIQUE</div>
+            <div class="value">0<span class="small-text"> CLIQUE</span></div>
+        </div>
+    </div>
+
+    <div class="block-info">
+        <div>
+            <div class="label">last finalized block</div> 
+            <div class="value">23255566</div>
+        </div>
+        <div>
+            <div class="label">last safe block</div>
+            <div class="value">23255630</div>
+        </div>
+    </div>
+  
+   <div class="history-graph">
+    <div class="label">Market evolution in 3 years</div>
+    
+   <div class="graph-placeholder" style="width:100%;  background-image:url('image/graphique.jpg'); background-size:cover; background-position:center;"></div>
+    
+    
+    <div class="graph-labels">
+        <span>2023</span>
+        <span>2024</span>
+        <span>2025</span>
+    </div>
+</div>
+</div><br><br><br>
+
+<div class="fixed-buttons-container">
+    <a href="#" class="fixed-button">
+        <i class="fas fa-plus"></i>
+        Dépôt
+    </a>
+    <a href="retrait.php" class="fixed-button">
+        <i class="fas fa-minus"></i>
+        Retrait
+    </a>
+</div>
+
+<div id="depositModal" class="modal">
+    <div class="modal-content">
+        <span class="close-btn">&times;</span>
+        <div class="modal-header">
+            <i class="fas fa-wallet"></i>
+            <h2>Effectuer un dépôt</h2>
+            <p>Veuillez choisir une méthode et copier les informations de paiement.</p>
+        </div>
+        <div class="modal-body">
+            <div class="deposit-option">
+                <label>Numéro de compte(USD)</label>
+                <div class="info-group">
+                    <input type="text" value="217794659491" readonly id="accountNumber"> 
+                    <button class="copy-btn" onclick="copyToClipboard('accountNumber')"><i class="fas fa-copy"></i></button>
+                </div>
+            </div>
+            <div class="deposit-option">
+                <label>Adresse USDT (TRC20)</label>
+                <div class="info-group">
+                    <input type="text" value="TTQy4URazYFovwi7uNYoDpbZ3aFiphasdj" readonly id="btcAddress">
+                    <button class="copy-btn" onclick="copyToClipboard('btcAddress')"><i class="fas fa-copy"></i></button>
+                </div>
+            </div>
+            <div class="deposit-option">
+                <label>Adresse Bitcoin (BTC)</label>
+                <div class="info-group">
+                    <input type="text" value="bc1q9y3xuvr7wm279uq8fufaw6p2f0lkyv8nq2yskk" readonly id="usdtAddress">
+                    <button class="copy-btn" onclick="copyToClipboard('usdtAddress')"><i class="fas fa-copy"></i></button>
+                </div>
+            </div>
+            <p class="modal-footer-text">
+                Assurez-vous d'utiliser le bon réseau pour vos transactions.
+            </p>
+        </div>
+    </div>
+</div>
+
+<div id="copy-success-message" class="copy-success-message">
+    <i class="fas fa-check-circle"></i> Adresse copiée !
+</div>
+
+<script>
+    // Affiche la fenêtre modale lorsque l'utilisateur clique sur "Dépôt"
+    document.querySelector('.fixed-button:nth-child(1)').addEventListener('click', function(event) {
+        event.preventDefault();
+        document.getElementById('depositModal').style.display = 'flex';
+    });
+
+    // Cache la fenêtre modale lorsque l'utilisateur clique sur le bouton de fermeture (x)
+    document.querySelector('.close-btn').addEventListener('click', function() {
+        document.getElementById('depositModal').style.display = 'none';
+    });
+
+    // Cache la fenêtre modale si l'utilisateur clique en dehors de la fenêtre
+    window.onclick = function(event) {
+        if (event.target == document.getElementById('depositModal')) {
+            document.getElementById('depositModal').style.display = 'none';
+        }
+    };
+
+    // Fonction pour copier le texte dans le presse-papiers et afficher le message de confirmation
+    function copyToClipboard(elementId) {
+        const inputElement = document.getElementById(elementId);
+        inputElement.select();
+        inputElement.setSelectionRange(0, 99999); /* Pour les appareils mobiles */
+        
+        navigator.clipboard.writeText(inputElement.value).then(function() {
+            const successMessage = document.getElementById('copy-success-message');
+            // Afficher le message
+            successMessage.classList.add('show');
+            
+            // Cacher le message après 2 secondes
+            setTimeout(() => {
+                successMessage.classList.remove('show');
+            }, 2000);
+            
+        }).catch(function(err) {
+            console.error("Erreur lors de la copie : ", err);
+            // Fallback pour les anciens navigateurs
+            try {
+                document.execCommand('copy');
+                const successMessage = document.getElementById('copy-success-message');
+                successmessage.classList.add('show');
+                setTimeout(() => {
+                    successMessage.classList.remove('show');
+                }, 2000);
+            } catch (e) {
+                console.error("Impossible de copier la commande : ", e);
+            }
+        });
+    }
+</script>
+
+
+<script>
+  const localVersion = "1.0.0"; // version actuelle du site (à changer quand tu mets à jour)
+
+  async function checkVersion() {
+    try {
+      const res = await fetch("version.json?nocache=" + Date.now()); 
+      const data = await res.json();
+
+      if (data.version !== localVersion) {
+        console.log("Nouvelle version détectée :", data.version);
+        location.reload(true); // recharge la page automatiquement
+      }
+    } catch (e) {
+      console.error("Impossible de vérifier la version", e);
+    }
+  }
+
+  // Vérifie toutes les 10 secondes si une nouvelle version est dispo
+  setInterval(checkVersion, 10000);
+</script>
+
+
+
+
+<script type="text/javascript">
+  function googleTranslateElementInit() {
+    new google.translate.TranslateElement({
+      pageLanguage: 'fr',
+      includedLanguages: 'es,pt,de,cs',
+      layout: google.translate.TranslateElement.InlineLayout.HORIZONTAL
+    }, 'google_translate_element');
+  }
+</script>
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+
+<script src="update.js"></script>
+
+</body>
+</html>

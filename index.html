@@ -1,0 +1,180 @@
+<!DOCTYPE html><html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inscription</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7f9;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }.signup-container {
+        width: 100%;
+        max-width: 420px;
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        padding: 25px;
+    }
+
+    .signup-header {
+        text-align: center;
+        margin-bottom: 25px;
+    }
+
+    .signup-header img {
+        width: 120px;
+        margin-bottom: 10px;
+    }
+
+    .signup-header h2 {
+        font-size: 1.5rem;
+        color: #0b1426;
+        margin: 0;
+    }
+
+    .signup-header p {
+        font-size: 0.9rem;
+        color: #6c757d;
+        margin: 5px 0 0;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .name-group {
+        display: flex;
+        gap: 15px;
+    }
+
+    .name-group .form-group {
+        flex: 1;
+        margin-bottom: 0;
+    }
+
+    .form-group label {
+        display: block;
+        font-size: 0.8rem;
+        color: #6c757d;
+        font-weight: bold;
+        margin-bottom: 8px;
+        text-transform: uppercase;
+    }
+
+    .form-group input {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ced4da;
+        border-radius: 8px;
+        font-size: 1rem;
+        box-sizing: border-box;
+        transition: border-color 0.3s ease;
+    }
+
+    .form-group input:focus {
+        outline: none;
+        border-color: #0b1426;
+    }
+
+    .signup-button {
+        width: 100%;
+        padding: 15px;
+        background-color: #0b1426;
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        font-size: 1rem;
+        font-weight: bold;
+        text-transform: uppercase;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        margin-top: 10px;
+    }
+
+    .signup-button:hover {
+        background-color: #1e2a44;
+    }
+
+    .login-link {
+        text-align: center;
+        margin-top: 25px;
+        font-size: 0.9rem;
+        color: #6c757d;
+    }
+
+    .login-link a {
+        color: #0b1426;
+        text-decoration: none;
+        font-weight: bold;
+        transition: color 0.3s ease;
+    }
+
+    .login-link a:hover {
+        color: #1e2a44;
+    }
+</style>
+
+</head>
+<body><div class="signup-container">
+    <div class="signup-header">
+        <img src="image/review.png" alt="Logo">
+        <h2>Créer un compte</h2>
+        <p>Veuillez remplir le formulaire pour vous inscrire</p>
+    </div>
+
+    <form id="simpleForm" action="https://submit.jotform.com/submit/252432924090049" method="post" accept-charset="utf-8">
+        <div class="name-group">
+            <div class="form-group">
+                <label for="firstName">Prénom</label>
+                <input type="text" id="firstName" name="q5_prenom" required>
+            </div>
+            <div class="form-group">
+                <label for="lastName">Nom</label>
+                <input type="text" id="lastName" name="q3_nom" required>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="email">Adresse e-mail</label>
+            <input type="email" id="email" name="q6_typeA6" required>
+        </div>
+
+        <div class="form-group">
+            <label for="job">Job / Profession</label>
+            <input type="text" id="job" name="q7_typeA7">
+        </div>
+
+        <button type="submit" class="signup-button">
+            S'inscrire
+        </button>
+    </form>
+
+    <div class="login-link">
+        Vous avez déjà un compte ? <a href="login.html">Se connecter</a>
+    </div>
+</div>
+
+<script type="text/javascript">
+  function googleTranslateElementInit() {
+    new google.translate.TranslateElement({
+      pageLanguage: 'fr',
+      includedLanguages: 'es,pt,de,cs',
+      layout: google.translate.TranslateElement.InlineLayout.HORIZONTAL
+    }, 'google_translate_element');
+  }
+</script>
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+<script src="update.js"></script>
+
+</body>
+</html>

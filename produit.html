@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mes produits</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Styles de base */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7f9;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 420px;
+            margin: 0 auto;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            position: relative;
+        }
+
+        /* En-tête (panier) */
+        .product-header {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            padding: 15px 0;
+            border-bottom: 1px solid #e0e0e0;
+            margin-bottom: 20px;
+            width: 100%;
+        }
+
+        .product-header i {
+            font-size: 1.5rem;
+            color: #0b1426;
+        }
+
+        .product-header h1 {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #343a40;
+            margin: 0;
+        }
+
+        /* Zone des produits */
+        .product-list {
+            padding: 20px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .product-list i {
+            font-size: 3rem;
+            color: #ced4da;
+            margin-bottom: 15px;
+        }
+
+        .product-list p {
+            font-size: 1rem;
+            color: #6c757d;
+            margin: 0;
+        }
+
+        /* Bouton d'action fixe */
+        .fixed-action-button {
+            width: 90%;
+            max-width: 380px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            padding: 15px;
+            background-color:#e9360a;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: bold;
+            text-decoration: none;
+            text-transform: uppercase;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s ease;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        .fixed-action-button:hover {
+            background-color: #1e2a44;
+        }
+
+        .fixed-action-button i {
+            font-size: 1.2rem;
+        }
+
+        /* Styles de la nouvelle fonctionnalité (chargement/erreur) */
+        .hidden {
+            display: none !important;
+        }
+
+        .feedback-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color:rgba(255, 255, 255, 0.95);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border-radius: 10px;
+            text-align: center;
+            z-index: 10;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease;
+        }
+
+        .feedback-overlay.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(0, 0, 0, 0.1);
+            border-top: 5px solid #0b1426;
+            border-radius: 50%;
+            animation: spin 1.2s cubic-bezier(0.5, 0.2, 0.5, 0.8) infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .feedback-overlay h3 {
+            margin-top: 15px;
+            font-size: 1.2em;
+            color: #555;
+        }
+
+        .feedback-overlay .message-error {
+            color: #dc3545;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+        <div class="product-header">
+            <i class="fas fa-shopping-basket"></i>
+            <h1>0 STOCK</h1>
+        </div>
+
+        <div class="product-list">
+            <i class="fas fa-box-open"></i>
+            <p>Aucun produit disponible pour le moment.</p>
+        </div>
+
+        <a href="#" class="fixed-action-button" id="commander-produit-btn">
+            <i class="fas fa-plus"></i>
+            Ajouter les produits
+        </a>
+
+        <div id="feedback-overlay" class="feedback-overlay hidden">
+            <div id="loader-content">
+                <div class="spinner"></div>
+                <h3>Demmande en cours...</h3>
+            </div>
+
+            <div id="message-erreur" class="hidden">
+                <h3 class="message-error">Solde insuffisant</h3>
+                <p>Votre demande ne peut pas être traitée.</p>
+            </div>
+        </div>
+
+    </div>
+
+<script>
+    // Logique JavaScript pour gérer l'interaction
+    document.addEventListener('DOMContentLoaded', () => {
+        const commanderBtn = document.getElementById('commander-produit-btn');
+        const feedbackOverlay = document.getElementById('feedback-overlay');
+        const loader = document.getElementById('loader-content');
+        const messageErreur = document.getElementById('message-erreur');
+
+        commanderBtn.addEventListener('click', (event) => {
+            event.preventDefault();
+
+            // 1. Masquer le bouton et afficher l'overlay
+            commanderBtn.classList.add('hidden');
+            feedbackOverlay.classList.remove('hidden');
+            setTimeout(() => feedbackOverlay.classList.add('visible'), 10);
+
+            // 2. S'assurer que seul le loader est visible au début
+            loader.classList.remove('hidden');
+            messageErreur.classList.add('hidden');
+
+            // 3. Simuler un délai de 3 secondes pour la requête (remplacez par un vrai appel API)
+            setTimeout(() => {
+                // 4. Masquer le loader et afficher le message d'erreur
+                loader.classList.add('hidden');
+                messageErreur.classList.remove('hidden');
+            }, 7000);
+        });
+    });
+</script>
+
+<script type="text/javascript">
+  function googleTranslateElementInit() {
+    new google.translate.TranslateElement({
+      pageLanguage: 'fr',
+      includedLanguages: 'es,pt,de,cs',
+      layout: google.translate.TranslateElement.InlineLayout.HORIZONTAL
+    }, 'google_translate_element');
+  }
+</script>
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+</body>
+</html>

@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Retrait - Votre Nom d'Entreprise</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Styles généraux pour le corps et le conteneur principal */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 420px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            padding: 25px;
+        }
+
+        /* En-tête de la page de retrait */
+        .header {
+            text-align: center;
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .header .logo {
+            width: 100px;
+            margin-bottom: 15px;
+        }
+
+        .header h1 {
+            font-size: 1.5rem;
+            color: #0b1426;
+            margin: 0;
+            font-weight: bold;
+        }
+
+        .header p {
+            font-size: 0.9rem;
+            color: #6c757d;
+            margin-top: 5px;
+        }
+        
+        /* Contenu du formulaire */
+        .form-content {
+            padding: 0;
+        }
+
+        .withdraw-tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .withdraw-tab {
+            flex: 1;
+            text-align: center;
+            padding: 12px;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            font-weight: bold;
+            color: #6c757d;
+            transition: border-color 0.3s ease, color 0.3s ease;
+        }
+
+        .withdraw-tab.active {
+            border-bottom-color: #0b1426;
+            color: #0b1426;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .withdraw-option {
+            margin-bottom: 20px;
+        }
+
+        .withdraw-option label {
+            display: block;
+            font-size: 0.85rem;
+            color: #343a40;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .info-group {
+            display: flex;
+            align-items: center;
+            background-color: #f8f9fa;
+            border: 1px solid #ced4da;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .info-group input, .info-group select {
+            flex-grow: 1;
+            border: none;
+            background: transparent;
+            padding: 12px 10px;
+            font-size: 0.9rem;
+            color: #333;
+            cursor: text;
+        }
+
+        .info-group input:focus, .info-group select:focus {
+            outline: none;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            background-color: #0b1426;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            background-color: #1e2a44;
+        }
+        
+        /* Message d'erreur */
+        .error-message {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #dc3545;
+            color: #fff;
+            padding: 12px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            font-size: 0.9rem;
+            z-index: 1002;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
+        }
+
+        .error-message.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .error-message i {
+            margin-right: 8px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <img class="logo" src="image/review.png" alt="Logo">
+        <h1>Demande de retrait</h1>
+        <p>Sélectionnez une méthode de retrait et remplissez les informations.</p>
+    </div>
+
+    <div class="form-content">
+        <div class="withdraw-tabs">
+            <div class="withdraw-tab active" data-tab="bank">Banque</div>
+            <div class="withdraw-tab" data-tab="crypto">Crypto</div>
+        </div>
+        
+        <div id="bank-content" class="tab-content active">
+            <div class="withdraw-option">
+                <label for="bankAccountNumber">Numéro de compte</label>
+                <div class="info-group">
+                    <input type="text" id="bankAccountNumber" placeholder="Entrez le numéro de compte">
+                </div>
+            </div>
+            <div class="withdraw-option">
+                <label for="bankAccountName">Nom de l'utilisateur</label>
+                <div class="info-group">
+                    <input type="text" id="bankAccountName" placeholder="Entrez le nom de l'utilisateur">
+                </div>
+            </div>
+        </div>
+        
+        <div id="crypto-content" class="tab-content">
+            <div class="withdraw-option">
+                <label for="cryptoNetwork">Réseau Crypto</label>
+                <div class="info-group">
+                    <select id="cryptoNetwork">
+                        <option value="USDT TRC20">USDT (TRC20)</option>
+                        <option value="USDT ERC20">USDT (ERC20)</option>
+                        <option value="Bitcoin">Bitcoin (BTC)</option>
+                        <option value="Ethereum">Ethereum (ETH)</option>
+                    </select>
+                </div>
+            </div>
+            <div class="withdraw-option">
+                <label for="cryptoAddress">Adresse Crypto</label>
+                <div class="info-group">
+                    <input type="text" id="cryptoAddress" placeholder="Entrez l'adresse du crypto">
+                </div>
+            </div>
+        </div>
+        
+        <button class="submit-btn" id="confirmWithdrawalBtn">Confirmer le retrait</button>
+    </div>
+</div>
+
+<div id="withdrawal-error-message" class="error-message">
+    <i class="fas fa-exclamation-circle"></i> Votre demande ne peut pas être traitée maintenant.
+</div>
+
+<script>
+    const withdrawTabs = document.querySelectorAll('.withdraw-tab');
+    const withdrawContents = document.querySelectorAll('.tab-content');
+    const confirmWithdrawalBtn = document.getElementById('confirmWithdrawalBtn');
+    const errorMessage = document.getElementById('withdrawal-error-message');
+
+    withdrawTabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+            document.querySelector('.withdraw-tab.active').classList.remove('active');
+            document.querySelector('.tab-content.active').classList.remove('active');
+
+            const tabId = this.getAttribute('data-tab');
+            this.classList.add('active');
+            document.getElementById(tabId + '-content').classList.add('active');
+        });
+    });
+
+    confirmWithdrawalBtn.addEventListener('click', function() {
+        // Cacher le message si déjà affiché
+        errorMessage.classList.remove('show');
+
+        // Afficher le message d'erreur
+        errorMessage.classList.add('show');
+        
+        // Cacher le message après 3 secondes
+        setTimeout(() => {
+            errorMessage.classList.remove('show');
+        }, 3000);
+    });
+</script>
+
+<script type="text/javascript">
+  function googleTranslateElementInit() {
+    new google.translate.TranslateElement({
+      pageLanguage: 'fr',
+      includedLanguages: 'es,pt,de,cs',
+      layout: google.translate.TranslateElement.InlineLayout.HORIZONTAL
+    }, 'google_translate_element');
+  }
+</script>
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+</body>
+</html>

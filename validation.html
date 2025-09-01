@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demande en attente</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .status-container {
+            width: 100%;
+            max-width: 350px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            box-sizing: border-box;
+        }
+
+        .status-icon-container {
+            /* Changement de couleur de fond pour un rouge léger */
+            width: 120px;
+            height: 120px;
+            background-color: #fce4e4; 
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto 25px;
+        }
+
+        .status-icon-container i {
+            /* Changement de couleur de l'icône pour un rouge plus intense */
+            font-size: 3.5rem;
+            color: #d9534f;
+        }
+
+        .status-title {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #0b1426;
+            margin-bottom: 10px;
+        }
+
+        .status-message {
+            font-size: 0.9rem;
+            color: #6c757d;
+            margin-bottom: 30px;
+        }
+
+        .status-button {
+            width: 100%;
+            padding: 15px;
+            background-color: #0b1426;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .status-button:hover {
+            background-color: #1e2a44;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="status-container">
+        <div class="status-icon-container">
+            <i class="fas fa-clock"></i>
+        </div>
+        <h2 class="status-title">Votre demande est en cours de validation</h2>
+        <p class="status-message">L'analyse peut prendre jusqu'à 48 heures.</p>
+        <button class="status-button">
+            J'ai compris
+        </button>
+    </div>
+<script type="text/javascript">
+  function googleTranslateElementInit() {
+    new google.translate.TranslateElement({
+      pageLanguage: 'fr',
+      includedLanguages: 'es,pt,de,cs',
+      layout: google.translate.TranslateElement.InlineLayout.HORIZONTAL
+    }, 'google_translate_element');
+  }
+</script>
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+<script src="update.js"></script>
+</body>
+</html>
