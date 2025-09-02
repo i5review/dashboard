@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Connexion</title>
+<script src="update.js?v=1.0.1"></script>
+<link rel="stylesheet" href="style.css?v=1.0.1">
+
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f7f9;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .login-container {
+      width: 100%;
+      max-width: 420px;
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      padding: 20px;
+    }
+
+    .login-header {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    .login-header img {
+      width: 120px;
+      margin-bottom: 10px;
+    }
+
+    .login-header h2 {
+      font-size: 1.5rem;
+      color: #0b1426;
+      margin: 0;
+    }
+
+    .login-header p {
+      font-size: 0.9rem;
+      color: #6c757d;
+      margin: 5px 0 0;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.8rem;
+      color: #6c757d;
+      font-weight: bold;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+    }
+
+    .form-group input[type="email"],
+    .form-group input[type="password"] {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ced4da;
+      border-radius: 8px;
+      font-size: 1rem;
+      box-sizing: border-box;
+      transition: border-color 0.3s ease;
+    }
+
+    .form-group input:focus {
+      outline: none;
+      border-color: #0b1426;
+    }
+
+    .form-options {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
+      font-size: 0.9rem;
+    }
+
+    .form-options a {
+      color: #0b1426;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .form-options a:hover {
+      color: #1e2a44;
+    }
+
+    .checkbox-group {
+      display: flex;
+      align-items: center;
+    }
+
+    .checkbox-group input[type="checkbox"] {
+      margin-right: 8px;
+    }
+
+    .login-button {
+      width: 100%;
+      padding: 15px;
+      background-color: #0b1426;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: bold;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .login-button:hover {
+      background-color: #1e2a44;
+    }
+
+    .signup-link {
+      text-align: center;
+      margin-top: 25px;
+      font-size: 0.9rem;
+      color: #6c757d;
+    }
+
+    .signup-link a {
+      color: #0b1426;
+      text-decoration: none;
+      font-weight: bold;
+      transition: color 0.3s ease;
+    }
+
+    .signup-link a:hover {
+      color: #1e2a44;
+    }
+
+    /* Message d'erreur */
+    .error-message {
+      display: none;
+      color: red;
+      text-align: center;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="login-container">
+    <div class="item" style="position: relative;">
+      <i class="fas fa-globe"></i>
+      <span>Langue</span>
+      <div id="custom-lang" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; z-index: 999;">
+        <div id="google_translate_element"></div>
+      </div>
+    </div>
+
+    <div class="login-header">
+      <img src="image/review.png" alt="Logo">
+      <h2>Se connecter</h2>
+      <p>Accédez à votre compte pour continuer</p>
+    </div>
+
+    <form id="loginForm">
+      <div class="form-group">
+        <label for="email">Adresse e-mail</label>
+        <input type="email" id="email" name="email" required>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Mot de passe</label>
+        <input type="password" id="password" name="password" required>
+      </div>
+
+      <div class="form-options">
+        <div class="checkbox-group">
+          <input type="checkbox" id="remember" name="remember">
+          <label for="remember" style="margin-bottom: 0;">Se souvenir de moi</label>
+        </div>
+        <a href="#">Mot de passe oublié ?</a>
+      </div>
+
+      <button type="submit" class="login-button">
+        Se connecter
+      </button>
+    </form>
+
+    <div id="errorMsg" class="error-message">❌ Ce compte n'est pas encore actif</div>
+
+    <div class="signup-link">
+      Vous n'avez pas de compte ? <a href="index.html">S'inscrire</a>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById("loginForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value.trim();
+      const errorMsg = document.getElementById("errorMsg");
+
+      if (email === "issa@example.com" && password === "Aziz0") {
+        window.location.href = "users_3.html"; // ✅ Redirection
+      } else {
+        errorMsg.style.display = "block"; // ❌ Afficher le message d'erreur
+      }
+    });
+  </script>
+
+
+<script>
+  const localVersion = "1.0.0"; // version actuelle du site (à changer quand tu mets à jour)
+
+  async function checkVersion() {
+    try {
+      const res = await fetch("version.json?nocache=" + Date.now()); 
+      const data = await res.json();
+
+      if (data.version !== localVersion) {
+        console.log("Nouvelle version détectée :", data.version);
+        location.reload(true); // recharge la page automatiquement
+      }
+    } catch (e) {
+      console.error("Impossible de vérifier la version", e);
+    }
+  }
+
+  // Vérifie toutes les 10 secondes si une nouvelle version est dispo
+  setInterval(checkVersion, 10000);
+</script>
+
+
+
+
+  <script type="text/javascript">
+    function googleTranslateElementInit() {
+      new google.translate.TranslateElement({
+        pageLanguage: 'fr',
+        includedLanguages: 'es,pt,de,cs',
+        layout: google.translate.TranslateElement.InlineLayout.HORIZONTAL
+      }, 'google_translate_element');
+    }
+  </script>
+  <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+
+
+</body>
+</html>
