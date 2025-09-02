@@ -1,5 +1,5 @@
 // update.js
-const localVersion = "1.0.1"; // Mets ici la version actuelle du site
+const localVersion = "1.0.0"; // Mets ici la version actuelle du site
 
 async function checkVersion() {
   try {
